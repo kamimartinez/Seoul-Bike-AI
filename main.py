@@ -26,7 +26,7 @@ def show_errors(params, samples, y, errors_list, verbose=False):
         if verbose:
             print("hyp %f  y %f" % (hyp, y[i]))
         error = hyp - y[i]
-        error_acum += error ** 2  # antes: 'error_acum =+ error**2' (bug, no acumulaba)
+        error_acum += error ** 2 
     mean_error_param = error_acum / len(samples)
     errors_list.append(mean_error_param)
 
@@ -47,7 +47,6 @@ feature_cols = [c for c in df_model.columns if c != target_col]
 y = df_model[target_col].tolist()
 samples = df_model[feature_cols].values.tolist()
 
-# agrega el 1 del bias al inicio de cada muestra
 samples = [[1] + row for row in samples]
 
 print("features:", feature_cols)
