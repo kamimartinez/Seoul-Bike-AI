@@ -1,0 +1,899 @@
+% bare_jrnl_compsoc.tex
+
+%% V1.4b
+%% 2015/08/26
+%% by Michael Shell
+%% See:
+%% http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE
+%% Computer Society journal paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/pkg/ieeetran
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall the IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%*************************************************************************
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+\documentclass[10pt,journal,compsoc]{IEEEtran}
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[10pt,journal,compsoc]{../sty/IEEEtran}
+
+
+
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/pkg/ifpdf
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+
+
+
+
+% *** CITATION PACKAGES ***
+%
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+  \usepackage{float}
+  \renewcommand{\tablename}{Tabla}
+  \usepackage{graphicx}
+\else
+  % normal IEEE
+  \usepackage{cite}
+  \usepackage{graphicx}
+\fi
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+%
+% Note that some packages require special options to format as the Computer
+% Society requires. In particular, Computer Society  papers do not use
+% compressed citation ranges as is done in typical IEEE papers
+% (e.g., [1]-[4]). Instead, they list every citation separately in order
+% (e.g., [1], [2], [3], [4]). To get the latter we need to load the cite
+% package with the nocompress option which is supported by cite.sty v4.0
+% and later. Note also the use of a CLASSOPTION conditional provided by
+% IEEEtran.cls V1.7 and later.
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at: 
+% http://www.ctan.org/pkg/graphicx
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/pkg/epslatex
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). The IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+
+
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics.
+%
+% Note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/pkg/algorithms
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/pkg/algorithmicx
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/array
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\ifCLASSOPTIONcompsoc
+%  \usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a sans serif font rather
+% than the serif font used in traditional IEEE formatting and thus the need
+% to invoke different subfig.sty package options depending on whether
+% compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure.
+% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
+% corrections already built into the system in which case a warning will
+% be issued if an attempt is made to load fixltx2e.sty as it is no longer
+% needed.
+% The latest version and documentation can be found at:
+% http://www.ctan.org/pkg/fixltx2e
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+
+
+%\ifCLASSOPTIONcaptionsoff
+%  \usepackage[nomarkers]{endfloat}
+% \let\MYoriglatexcaption\caption
+% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
+%\fi
+% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and 
+% Axel Sommerfeldt. This package may be useful when used in conjunction with 
+% IEEEtran.cls'  captionsoff option. Some IEEE journals/societies require that
+% submissions have lists of figures/tables at the end of the paper and that
+% figures/tables without any captions are placed on a page by themselves at
+% the end of the document. If needed, the draftcls IEEEtran class option or
+% \CLASSINPUTbaselinestretch interface can be used to increase the line
+% spacing as well. Be sure and use the nomarkers option of endfloat to
+% prevent endfloat from "marking" where the figures would have been placed
+% in the text. The two hack lines of code above are a slight modification of
+% that suggested by in the endfloat docs (section 8.4.1) to ensure that
+% the full captions always appear in the list of figures/tables - even if
+% the user used the short optional argument of \caption[]{}.
+% IEEE papers do not typically make use of \caption[]'s optional argument,
+% so this should not be an issue. A similar trick can be used to disable
+% captions of packages such as subfig.sty that lack options to turn off
+% the subcaptions:
+% For subfig.sty:
+% \let\MYorigsubfloat\subfloat
+% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
+% However, the above trick will not work if both optional arguments of
+% the \subfloat command are used. Furthermore, there needs to be a
+% description of each subfigure *somewhere* and endfloat does not add
+% subfigure captions to its list of figures. Thus, the best approach is to
+% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
+% and instead reference/explain all the subfigures within the main caption.
+% The latest version of endfloat.sty and its documentation can obtained at:
+% http://www.ctan.org/pkg/endfloat
+%
+% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
+% later in the document, say, to conditionally put the References on a 
+% page by themselves.
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/url
+% Basically, \url{my_url_here}.
+
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{
+Seoul Bike Sharing Demand Dataset}
+%
+%
+% author names and IEEE memberships
+% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
+% a structure at a ~ so this keeps an author's name from being broken across
+% two lines.
+% use \thanks{} to gain access to the first footnote area
+% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
+% was not built to handle multiple paragraphs
+%
+%
+%\IEEEcompsocitemizethanks is a special \thanks that produces the bulleted
+% lists the Computer Society journals use for "first footnote" author
+% affiliations. Use \IEEEcompsocthanksitem which works much like \item
+% for each affiliation group. When not in compsoc mode,
+% \IEEEcompsocitemizethanks becomes like \thanks and
+% \IEEEcompsocthanksitem becomes a line break with idention. This
+% facilitates dual compilation, although admittedly the differences in the
+% desired content of \author between the different types of papers makes a
+% one-size-fits-all approach a daunting prospect. For instance, compsoc 
+% journal papers have the author affiliations above the "Manuscript
+% received ..."  text while in non-compsoc journals this is reversed. Sigh.
+
+\author{Kamila Jeannette Martinez Ibarra - A01711833
+\\ Inteligencia artificial avanzada para la ciencia de datos (Gpo 601)
+}
+
+% note the % following the last \IEEEmembership and also \thanks - 
+% these prevent an unwanted space from occurring between the last author name
+% and the end of the author line. i.e., if you had this:
+% 
+% \author{....lastname \thanks{...} \thanks{...} }
+%                     ^------------^------------^----Do not want these spaces!
+%
+% a space would be appended to the last name and could cause every name on that
+% line to be shifted left slightly. This is one of those "LaTeX things". For
+% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
+% "AB" then you have to do: "\textbf{A}\textbf{B}"
+% \thanks is no different in this regard, so shield the last } of each \thanks
+% that ends a line with a % and do not let a space in before the next \thanks.
+% Spaces after \IEEEmembership other than the last one are OK (and needed) as
+% you are supposed to have spaces between the names. For what it is worth,
+% this is a minor point as most people would not even notice if the said evil
+% space somehow managed to creep in.
+
+
+
+% The paper headers
+\markboth{Inteligencia artificial avanzada para la ciencia de datos (Gpo 601), Agosto~2026}%
+{Shell \MakeLowercase{\textit{et al.}}:  Seoul Bike Sharing Demand}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+% 
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+% The publisher's ID mark at the bottom of the page is less important with
+% Computer Society journal papers as those publications place the marks
+% outside of the main text columns and, therefore, unlike regular IEEE
+% journals, the available text space is not reduced by their presence.
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2015 IEEE}
+% or like this to get the Computer Society new two part style.
+%\IEEEpubid{\makebox[\columnwidth]{\hfill 0000--0000/00/\$00.00~\copyright~2015 IEEE}%
+%\hspace{\columnsep}\makebox[\columnwidth]{Published by the IEEE Computer Society\hfill}}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark (Computer Society jorunal
+% papers don't need this extra clearance.)
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+% for Computer Society papers, we must declare the abstract and index terms
+% PRIOR to the title within the \IEEEtitleabstractindextext IEEEtran
+% command as these need to go into the title area created by \maketitle.
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+\IEEEtitleabstractindextext{%
+\begin{abstract}
+Este trabajo presenta un análisis exploratorio de datos y la implementación desde cero, sin frameworks de machine learning, de un modelo de regresión lineal múltiple mediante descenso de gradiente para predecir la demanda horaria de bicicletas rentadas en Seúl a partir de variables climáticas y de calendario. Los datos se dividieron en conjuntos de entrenamiento, validación y prueba. El modelo obtuvo un R² de 0.55 en el conjunto de prueba, es decir, las variables utilizadas logran explicar poco más de la mitad de la variabilidad en la demanda. Esto sugiere que la relación entre el clima y la demanda no es completamente lineal.
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+instancias
+\end{IEEEkeywords}}
+
+
+% make the title area
+\maketitle
+
+
+% To allow for easy dual compilation without having to reenter the
+% abstract/keywords data, the \IEEEtitleabstractindextext text will
+% not be used in maketitle, but will appear (i.e., to be "transported")
+% here as \IEEEdisplaynontitleabstractindextext when the compsoc 
+% or transmag modes are not selected <OR> if conference mode is selected 
+% - because all conference papers position the abstract like regular
+% papers do.
+\IEEEdisplaynontitleabstractindextext
+% \IEEEdisplaynontitleabstractindextext has no effect when using
+% compsoc or transmag under a non-conference mode.
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+\IEEEraisesectionheading{\section{Introducción}\label{sec:introduction}}
+% Computer Society journal (but not conference!) papers do something unusual
+% with the very first section heading (almost always called "Introduction").
+% They place it ABOVE the main text! IEEEtran.cls does not automatically do
+% this for you, but you can achieve this effect with the provided
+% \IEEEraisesectionheading{} command. Note the need to keep any \label that
+% is to refer to the section immediately after \section in the above as
+% \IEEEraisesectionheading puts \section within a raised box.
+
+
+
+
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps (small caps for compsoc).
+% 
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+% 
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by the IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+% 
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+% 
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+\IEEEPARstart{L}{a} contaminación del aire debido a los automóviles continúa siendo una de las principales amenazas medioambientales para la salud humana. En la Unión Europea, el transporte es el único sector en el que las emisiones de gases de efecto invernadero han aumentado en las últimas tres décadas, con un incremento del 33.5\% entre 1990 y 2019 \cite{stats}.
+
+Como alternativa a este problema, en varios países desarrollados del mundo las bicicletas se han vuelto una forma positiva y amigable de ayudar al medio ambiente. Sin embargo, para que estos sistemas funcionen bien, las ciudades necesitan predecir con precisión cuántas bicicletas se van a rentar en cada momento, de forma que haya suficiente disponibilidad sin desperdiciar recursos.
+
+Al ser un sistema de renta continuo a lo largo de los años, se tienen varios factores climáticos y de calendario que afectan la demanda de bicicletas. El presente trabajo tiene como objetivo implementar un modelo de regresión lineal para la predicción de bicicletas rentadas en determinada hora del día a partir de un conjunto de datos con factores climáticos y de calendario.
+
+Así mismo, nos asistiremos de métricas que nos permitan evaluar el desempeño del modelo de regresión, como la variabilidad de la demanda de bicicletas o qué tan alejadas están las predicciones del valor real \cite{metrics}.
+
+\subsection{Contexto del Conjunto de Datos}
+El conjunto de datos contiene información de la demanda de bicicletas de la ciudad de Seúl, Corea del Sur. Incluye variables climáticas y la cantidad de bicicletas rentadas por hora \cite{dataset}. Las instancias abarcan fechas del 1 de diciembre de 2017 hasta el 30 de noviembre de 2018, con un total de 8,760 registros. 
+
+% needed in second column of first page if using \IEEEpubid
+%\IEEEpubidadjcol
+
+\subsubsection{Descripción de las características}
+El conjunto de datos abarca 13 características. 
+\begin{table}[H]
+\centering
+\caption{Descripción de las características del conjunto de datos}
+\label{tab:features}
+\begin{tabular}{|l|p{5cm}|}
+\hline
+\textbf{Variable} & \textbf{Descripción} \\
+\hline
+Date & Fecha del registro (día/mes/año) \\
+\hline
+Rented Bike Count & Número de bicicletas rentadas en esa hora (variable objetivo) \\
+\hline
+Hour & Hora del día (0--23) \\
+\hline
+Temperature(°C) & Temperatura ambiente en grados Celsius \\
+\hline
+Humidity(\%) & Humedad relativa \\
+\hline
+Wind speed (m/s) & Velocidad del viento \\
+\hline
+Visibility (10m) & Visibilidad, en unidades de 10 metros \\
+\hline
+Dew point temperature(°C) & Temperatura de punto de rocío \\
+\hline
+Solar Radiation (MJ/m2) & Radiación solar \\
+\hline
+Rainfall(mm) & Precipitación pluvial \\
+\hline
+Snowfall (cm) & Precipitación de nieve \\
+\hline
+Seasons & Estación del año (invierno, primavera, verano, otoño) \\
+\hline
+Holiday & Indica si el día es festivo o no \\
+\hline
+Functioning Day & Indica si el sistema de renta estaba operando ese día (Sí/No) \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\section{ETL}
+Extracción, transformación y carga (ETL) es el proceso consistente en combinar datos de diferentes orígenes en un gran repositorio central. El proceso consta de tres pasos. Primero se extraen los datos de la fuente origen, seguido de una transformación de estos adecuada al analisis previsto, y finalmente se cargan en un repositorio de datos \cite{aws_etl}.  
+\subsection{Extracción}
+Se descargó el conjunto de datos del repositorio de UC Irvine \cite{dataset}. La extracción se llevó a cabo junto con la librería de Python, pandas, para convertirlo en un dataframe.
+
+\subsection{Análisis exploratorio de datos (EDA)}
+El análisis exploratorio de datos (EDA) tiene como objetivo investigar los conjuntos de datos y resumir las características principales. El propósito del EDA es analizar los datos antes de hacer suposiciones sobre ellos, permitiendo identificar errores, patrones, valores atípicos y relaciones entre variables. Garantizando resultados que sean base para un análisis sofisticado \cite{ibm_eda}. 
+\subsubsection{Histogramas}
+Los histogramas son útiles para mostrar la distribución de una única variable de escala \cite{ibm_histogramas}. Al aplicarlos sobre las variables numéricas del conjunto de datos, se observan distintos patrones de distribución. Rented Bike Count está sesgada a la derecha (Figura~\ref{fig:histo_rented}), ya que la mayoría de las horas registran pocas rentas. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{imagerented.png}
+    \caption{Distribución de Rented Bike Count}
+    \label{fig:histo_rented}
+\end{figure}
+
+De manera similar, Rainfall(mm), Snowfall (cm) y Solar Radiation (MJ/m2) presentan la mayoría de sus valores en cero (Figura~\ref{fig:histo_climate}), pues llueve, nieva o hay radiación solar plena solo durante una fracción de las horas registradas. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{image.png}
+    \caption{Distribución de Rainfall(mm), Snowfall (cm) y Solar Radiation}
+    \label{fig:histo_climate}
+\end{figure}
+En contraste, Temperature(°C) y Dew point temperature(°C) muestran una distribución más simétrica (Figura~\ref{fig:histo_temp}), cercana a una campana, consistente con el comportamiento anual del clima. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{imagetemp.png}
+    \caption{Distribución de Temperature(°C) y Dew point temperature(°C)}
+    \label{fig:histo_temp}
+\end{figure}
+Finalmente, Hour presenta una distribución uniforme (Figura~\ref{fig:histo_hour}), como es de esperarse en una variable que representa las 24 horas del día repetidas a lo largo de todo el año.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=\linewidth]{imagehour.png}
+    \caption{Distribución de Hour}
+    \label{fig:histo_hour}
+\end{figure}
+
+\subsubsection{Análisis de correlación}
+La matriz de correlación permite evaluar la fuerza y la dirección de la relación entre dos variables \cite{minitab_corr}. Los valores de correlación se encuentran entre -1 y +1. Si ambas variables tienden a aumentar o disminuir juntas, la correlación es positiva. Si una aumenta mientras la otra disminuye, la correlación es negativa. Entre más cercano esté el valor a los extremos, más fuerte es la relación. Un valor cercano a 0 indica una relación débil o inexistente.
+
+Para nuestro conjunto de datos realizamos una matriz de correlación, visualizada en un mapa de calor (Figura~\ref{fig:matrizcorr}). 
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=\linewidth]{heatmap.png}
+    \caption{Matriz de Correlación}
+    \label{fig:matrizcorr}
+\end{figure}
+
+Al observar la matriz de correlación (Figura~\ref{fig:heatmap}), destaca que Temperature(°C) y Dew point temperature(°C) están casi perfectamente correlacionadas, 0.91, lo cual indica multicolinealidad \cite{ibm_multi}. Estas pueden afectar negativamente nuestro modelo de predicción, por lo cual estaremos eligiendo solo una.
+
+En cuanto a la variable objetivo, Rented Bike Count se correlaciona más con Temperature(°C) (0.54), Hour (0.41) y Dew point temperature(°C) (0.38), lo que sugiere que la temperatura y la hora del día son, hasta este punto del análisis, las características con relación más fuerte a la demanda de bicicletas. Por su parte, Humidity(\%) presenta una correlación negativa tanto con Rented Bike Count (-0.20) como con Hour (-0.24), y también se correlaciona negativamente con Visibility (10m) (-0.54), lo que indica que los días más húmedos tienden a presentar menor visibilidad y una demanda de bicicletas  menor.
+
+El resto de las variables muestran correlaciones lineales débiles con Rented Bike Count.
+
+\subsection[aa]{Selección de características}
+A partir de los hallazgos del análisis exploratorio, se realizaron tres eliminaciones sobre el conjunto de datos antes de continuar con la transformación.
+
+\subsubsection{Eliminación de Dew point temperature(°C)}
+Como se observó en la matriz de correlación, esta variable y Temperature(°C) presentan una correlación de 0.91, lo que indica que ambas capturan prácticamente la misma información térmica. Mantener ambas introduciría multicolinealidad en un futuro modelo lineal, por lo que se conservó únicamente Temperature(°C).
+
+\subsubsection{Eliminación de Date}
+Al tratarse de una variable de tipo texto, no puede ser utilizada directamente por un modelo de regresión lineal, el cual requiere que todas las variables predictoras sean numéricas.
+
+\subsubsection{Eliminación de instancias con Functioning Day = No}
+Se eliminaron las instancias en las que Functioning Day tiene el valor No, es decir, las horas en las que el sistema de renta de bicicletas se encontraba cerrado. En estos casos, Rented Bike Count es igual a 0 por definición, sin relación alguna con las condiciones climáticas registradas en esa hora. 
+
+\subsection{Transformación}
+\subsubsection{Estandarización}
+Para las variables númericas, se llevo a cabo una transformación a traves de una estandarización de los datos. 
+
+Estandarizar los datos significa llevarlos a una escala común, de forma que sea más fácil analizarlos, compararlos y utilizarlos en un modelo. En términos generales, el objetivo es que todas las variables del conjunto de datos queden en la misma escala, normalmente con media 0 y desviación estándar 1 \cite{standa}.
+
+La estandarización de los datos permite realizar comparaciones justas entre variables. Sin este proceso, aquellas con escalas o varianzas más grandes podrían tener un peso desproporcionado sobre el análisis \cite{standa}. En este trabajo, se estandarizaron las siguientes variables:
+
+\begin{itemize}
+\item Temperature(°C)
+\item Humidity(\%)
+\item Wind speed (m/s)
+\item Visibility (10m)
+\item Solar Radiation (MJ/m2)
+\item Rainfall(mm)
+\item Snowfall (cm)
+\end{itemize}
+
+Actualmente, me encuentro analizando si estandarizar también la variable Hour mejoraría el desempeño del modelo, dado que se trata de una variable cíclica y, por lo tanto, su escala podría afectar de forma distinta. Esta es una hipótesis que planeo demostrar en trabajo futuro.
+
+\subsubsection{One-Hot Encoding}
+Para las variables categóricas, se llevó a cabo una codificación One-Hot Encoding. En este tipo de técnica, cada categoría se representa mediante un vector de $N$ elementos, donde $N$ corresponde al número total de categorías posibles. Dentro de este vector, exactamente un elemento toma el valor de 1, mientras que todos los demás permanecen en 0 \cite{onehot}.
+
+Si bien el conjunto de datos cuenta con tres variables categóricas Seasons, Holiday y Functioning Day, únicamente Seasons y Holiday fueron modificadas mediante One-Hot Encoding. Functioning Day no se incluyó en este paso, ya que, como se explicó en la sección de selección de características, las instancias donde esta variable tomaba el valor "No" fueron eliminadas del conjunto de datos por no aportar información relevante al modelo. 
+
+\subsection{Exportación}
+Una vez aplicadas las transformaciones explicadas en las secciones anteriores, el nuevo conjunto de datos se exportó a un nuevo archivo, seoul-clean.csv, el cual será utilizado para el entrenamiento del modelo de regresión lineal. El conjunto de datos final quedó conformado por 8,465 instancias y 15 variables (características). 
+
+\section{Modelo de Regresión Lineal}
+El modelo de regresión lineal se utiliza para predecir el valor de una variable a partir del valor de otra. A la variable que se desea predecir se le conoce como variable dependiente, mientras que la variable utilizada para predecirla se conoce como variable independiente \cite{ibm_regresion}. 
+
+Este tipo de análisis estima los coeficientes de una ecuación lineal, la cual puede involucrar una o más variables independientes, que mejor predicen el valor de la variable dependiente \cite{ibm_regresion}
+
+En este trabajo se utilizan múltiples variables independientes para predecir una única variable dependiente, Rented Bike Count, por lo que el modelo empleado corresponde a una regresión lineal múltiple.
+
+\subsection{Función de hipótesis}
+En regresión lineal, el modelo busca ajustar la línea que mejor se ajuste a los datos. Esta línea se conoce como función de hipótesis, y se define como \cite{funciones}:
+
+\begin{equation}
+h_\theta(x) = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + \dots + \theta_n x_n
+\label{eq:hypothesis}
+\end{equation}
+
+donde:
+\begin{itemize}
+\item $h_\theta(x)$ es el valor predicho
+\item $\theta_0$ es el bias
+\item $\theta_1, \dots, \theta_n$ son los parámetros asociados a cada variable independiente
+\item $x_1, \dots, x_n$ son los valores de dichas variables para una observación dada. 
+\end{itemize}
+En este trabajo, esta función se implementó en la función h(), la cual recorre cada parámetro y lo multiplica por su variable correspondiente, sumando el resultado.
+
+\subsection{Función de costo}
+Una vez que el modelo genera predicciones, es necesario medir qué tan alejadas están de los valores reales. Para ello se utiliza la función de costo, la cual cuantifica el error del modelo en función de sus parámetros actuales. En regresión lineal, la función de costo más utilizada es el error cuadrático medio \cite{funcion_costo}:
+
+\begin{equation}
+J(\theta) = \frac{1}{2m} \sum_{i=1}^{m} \left( h_\theta(x^{(i)}) - y^{(i)} \right)^2
+\label{eq:cost}
+\end{equation}
+
+donde:
+\begin{itemize}
+    \item $m$ es el número de observaciones en el conjunto de entrenamiento
+    \item $h_\theta(x^{(i)})$ es la predicción para la observación $i$
+    \item $y^{(i)}$ es su valor real
+\end{itemize}
+ En el código, esta función corresponde a show\_errors(), que calcula y almacena el error cuadrático medio en cada época.
+
+\subsection{Descenso de gradiente}
+El descenso de gradiente es un algoritmo de optimización utilizado para encontrar los parámetros que minimizan el error de predicción del modelo, ajustando de forma iterativa dichos parámetros en la dirección donde el error disminuye más rápidamente \cite{geeksforgeeks_gd}. Su funcionamiento puede resumirse en los siguientes pasos:
+
+\begin{enumerate}
+\item \textbf{Inicialización de parámetros}: se comienza con los parámetros del modelo en cero.
+\item \textbf{Cálculo del error}: en cada época se mide el error del modelo tanto en el conjunto de entrenamiento como en el de validación, con el fin de vigilar el desempeño del modelo durante el entrenamiento.
+\item \textbf{Actualización de parámetros}: los parámetros se ajustan en la dirección que reduce el error, de acuerdo con la tasa de aprendizaje definida.
+\item \textbf{Repetición}: los pasos anteriores se repiten hasta que los parámetros dejan de cambiar de forma significativa, o hasta alcanzar un número máximo de épocas definido de antemano.
+\end{enumerate}
+
+La actualización de cada parámetro $\theta_j$ se realiza mediante la siguiente regla:
+
+\begin{equation}
+\theta_j := \theta_j - \alpha \frac{1}{m} \sum_{i=1}^{m} \left( h_\theta(x^{(i)}) - y^{(i)} \right) x_j^{(i)}
+\label{eq:gradient_descent}
+\end{equation}
+
+donde $\alpha$ es la tasa de aprendizaje (\textit{learning rate}), la cual controla el tamaño del paso en cada actualización.
+
+\subsection{Entrenamiento del modelo}
+Para entrenar el modelo, el conjunto de datos se dividió previamente en tres subconjuntos: entrenamiento, validación y prueba, en una proporción de 60\%, 20\% y 20\% respectivamente. El modelo se entrenó únicamente con el conjunto de entrenamiento, mientras que el conjunto de validación se utilizó para vigilar su desempeño durante el proceso, sin influir directamente en la actualización de los parámetros. El conjunto de prueba se mantuvo completamente al margen del entrenamiento, con el fin de reservarlo para la evaluación final del modelo.
+
+El entrenamiento se realizó con una tasa de aprendizaje $\alpha = 0.01$, deteniéndose cuando el cambio máximo entre los parámetros de una época y la siguiente fue menor a una tolerancia de $1\times10^{-6}$, o al alcanzar un máximo de 10,000 épocas.
+
+
+\section{Métricas de evaluación}
+
+\subsection{Error Cuadrático Medio (MSE)}
+Representa el promedio de las diferencias al cuadrado entre los valores predichos y los valores reales \cite{funcion_costo}:
+
+\begin{equation}
+MSE = \frac{1}{m}\sum_{i=1}^{m} \left( h_\theta(x^{(i)}) - y^{(i)} \right)^2
+\label{eq:mse}
+\end{equation}
+
+Al elevar al cuadrado las diferencias, el MSE penaliza con mayor severidad los errores grandes en comparación con los pequeños.
+
+\subsection{Coeficiente de Determinación (R\textsuperscript{2})}
+El coeficiente de determinación (R\textsuperscript{2}) indica la cantidad proporcional de variación en la variable de respuesta $y$ explicada por las variables independientes $X$ en el modelo de regresión lineal \cite{r2}.
+
+\begin{equation}
+R^2 = 1 - \frac{SSE}{SST}
+\label{eq:r2}
+\end{equation}
+
+donde $SSE$ es la suma de cuadrados del error, la diferencia entre los valores predichos y los reales, y $SST$ es la suma de cuadrados total, la diferencia entre los valores reales y su media \cite{sss}. 
+
+\section{Resultados}
+\label{sec:resultados}
+El modelo se evaluó de forma iterativa, ajustando dos aspectos del proceso de entrenamiento a partir de los resultados obtenidos: el número de épocas y la inclusión de las instancias con Functioning Day = No.
+
+En una primera corrida, el modelo se entrenó durante 2,000 épocas, utilizando todavía el conjunto de datos completo (8,760 instancias, 17 variables), es decir, sin haber eliminado las instancias de las horas en las que teniamos Functioning Day = No. Esta corrida obtuvo un MSE de 196,584.73 y un R\textsuperscript{2} de 0.5352 en el conjunto de prueba. 
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=1\linewidth]{Figure_1 2 mil epochs.png}
+    \caption{}
+    \label{fig:placeholder}
+\end{figure}
+
+
+Con el fin de verificar si el modelo aún no había concluido completamente, se incrementó el número de épocas a 10,000, manteniendo el resto del conjunto de datos sin cambios. El MSE disminuyó a 193,411.99 y el R\textsuperscript{2} aumentó ligeramente a 0.5427, lo que indica una mejora marginal y sugiere que el modelo se encontraba cerca de la convergencia incluso con 2,000 épocas.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=\linewidth]{Figure_1_.png}
+    \caption{}
+    \label{fig:placeholder}
+\end{figure}
+
+Finalmente, se eliminaron las instancias con Functioning Day = No, como se justificó en la Sección 2.3.3, reduciendo el conjunto de datos a 8,465 instancias y 15 variables (al eliminarse también las columnas dummy Functioning Day\_Yes y Functioning Day\_No, que quedaban constantes tras el filtro). Entrenando nuevamente con 10,000 épocas, el modelo obtuvo un MSE de 191,644.15 y un R\textsuperscript{2} de 0.5517, la mejor combinación de las tres corridas.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=1\linewidth]{Figure_1_10 mil epochs pero sin functioning day.png}
+    \caption{}
+    \label{fig:placeholder}
+\end{figure}
+
+La Tabla~\ref{tab:resultados} resume los resultados de las tres corridas.
+
+\begin{table}[H]
+\centering
+\caption{Comparación de resultados entre corridas}
+\label{tab:resultados}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Corrida} & \textbf{Épocas} & \textbf{Instancias} & \textbf{MSE} & \textbf{R\textsuperscript{2}} \\
+\hline
+1 & 2,000 & 8,760 & 196,584.73 & 0.5352 \\
+\hline
+2 & 10,000 & 8,760 & 193,411.99 & 0.5427 \\
+\hline
+3 & 10,000 & 8,465 & 191,644.15 & 0.5517 \\
+\hline
+\end{tabular}
+\end{table}
+
+Estos resultados muestran que, si bien aumentar el número de épocas mejoró ligeramente el desempeño del modelo, el cambio con mayor impacto fue la eliminación de las instancias con Functioning Day = No.
+
+
+\section{Conclusión}
+En este trabajo se implementó un modelo de regresión lineal múltiple con el objetivo de predecir la demanda horaria de bicicletas rentadas en Seúl a partir de variables climáticas y de calendario. 
+
+El modelo final, entrenado durante 10,000 épocas sobre el conjunto de datos depurado, obtuvo un R\textsuperscript{2} de 0.5517 y un MSE de 191,644.15 en el conjunto de prueba. Esto indica que las variables climáticas y de calendario consideradas logran explicar poco más de la mitad de la variabilidad observada en la demanda de bicicletas. 
+
+
+
+ \section*{Agradecimientos}
+Me gustaría agradecer a mi familia y amigos :)
+
+
+ \newpage
+\begin{thebibliography}{1}
+
+\bibitem{stats}
+Parlamento Europeo, "Emisiones de CO2 de los coches: hechos y cifras (infografía)," Parlamento Europeo, 13 mar. 2019. [En línea]. Disponible: https://www.europarl.europa.eu/topics/es/article/20190313STO31218/emisiones-de-co2-de-los-coches-hechos-y-cifras-infografia
+
+\bibitem{metrics} 
+E. Lewinson, "A Comprehensive Overview of Regression Evaluation Metrics," NVIDIA Technical Blog, 20 abr. 2023. [En línea]. Disponible: https://developer.nvidia.com/blog/a-comprehensive-overview-of-regression-evaluation-metrics/ (link por extrañas razones no funciona)
+
+\bibitem{dataset}
+“Seoul Bike Sharing demand - UCI Machine Learning Repository.” https://archive.ics.uci.edu/dataset/560/seoul+bike+sharing+demand
+
+\bibitem{aws_etl}
+Amazon Web Services, “¿Qué es extracción, transformación y carga (ETL)?,” Amazon Web Services, Inc. https://aws.amazon.com/es/what-is/etl/
+
+\bibitem{ibm_eda}
+“Analytics | IBM,” Jun. 07, 2024. https://share.google/CgtyooGreabQQZVdX
+
+\bibitem{ibm_histogramas}
+“IBM Watson Studio and Knowledge Catalog,” Mar. 27, 2025. https://www.ibm.com/docs/es/ws-and-kc?topic=types-histogram-charts
+
+\bibitem{minitab_corr}
+“Interpretar todos los estadísticos y gráficas para Correlación - Minitab,” (C) Minitab, LLC. All Rights Reserved. 2026.  https://share.google/ln0nHtHrgAIlnLFVV
+
+\bibitem{ibm_multi}
+J. Murel PhD and E. Kavlakoglu, “Multicolinealidad,” Artificial Intelligence, Nov. 27, 2025. https://share.google/b4i9OcLyYTsvqPfwJ
+
+\bibitem{standa}
+T. A. S. Srinivas, Y. Sravanthi, Y. V. Kumar, and I. V. D. Srihith, “Data Standardization: Key to effective data integration,” Zenodo (CERN European Organization for Nuclear Research), Nov. 2023, doi: 10.5281/zenodo.10060920.
+
+\bibitem{onehot}
+“Categorical data: Vocabulary and one-hot encoding,” Google for Developers. https://share.google/ZpxwWHIAy5YUN6KhY
+
+\bibitem{ibm_regresion}
+Ibm, “Linear Regression,” Think, Nov. 17, 2025. https://www.ibm.com/think/topics/linear-regression
+
+\bibitem{funciones}
+Grasp, “Grasp,” Grasp. https://paths.grasp.study/modules/18a4b167-ba31-4ae3-8084-eeb66f9a9151/lessons/3249a180-bba6-424b-91e2-0e3ad5056997
+
+\bibitem{funcion_costo}
+Techietory, “Understanding the cost function in linear regression,” Techietory, Feb. 18, 2026. https://share.google/dkvnZz0UDFS3gliOV
+
+\bibitem{geeksforgeeks_gd}
+GeeksforGeeks, “Gradient descent in linear regression,” GeeksforGeeks, Jun. 09, 2026. https://www.geeksforgeeks.org/machine-learning/gradient-descent-in-linear-regression/
+
+\bibitem{r2}
+“Coeficiente de determinación (R cuadrado) - MATLAB  Simulink.” https://la.mathworks.com/help/stats/coefficient-of-determination-r-squared.html 
+
+\bibitem{sss}
+I. Valchanov, “Sum of squares: SST, SSR, SSE,” 365 Data Science, Sep. 19, 2025. https://365datascience.com/tutorials/statistics-tutorials/sum-squares/
+
+\end{thebibliography}
+
+\end{document}
+
+
