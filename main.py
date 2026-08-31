@@ -80,7 +80,7 @@ print("train:", len(samples_train), "| validation:", len(samples_val), "| test:"
 params = [0] * len(samples_train[0])
 alfa = 0.01
 tolerancia = 1e-6
-max_epochs = 10000
+max_epochs = 2000
 
 epochs = 0
 while True:
