@@ -31,7 +31,7 @@ El proyecto se ejecuta en dos pasos, en este orden:
    python cleaning.py
    ```
 
-2. **Entrenamiento del modelo** — carga `seoul-clean.csv`, entrena el modelo y muestra las métricas de evaluación (MSE, R²):
+2. **Entrenamiento del modelo** entrena el modelo y muestra las métricas de evaluación (MSE, R²):
 
    ```bash
    python main.py
