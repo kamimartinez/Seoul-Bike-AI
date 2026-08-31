@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import random
 
 df_model = pd.read_csv('seoul-clean.csv')
 
@@ -53,8 +55,6 @@ print("features:", feature_cols)
 print("num samples:", len(samples), "| num params:", len(samples[0]))
 
 
-import random
-
 random.seed(42)
 idx = list(range(len(samples)))
 random.shuffle(idx)
@@ -96,7 +96,6 @@ while True:
         print("parámetros finales:", params)
         break
 
-import matplotlib.pyplot as plt
 
 plt.plot(__errors__, label="train")
 plt.plot(__val_errors__, label="validation")
