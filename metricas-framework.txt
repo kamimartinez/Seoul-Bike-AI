@@ -1,0 +1,19 @@
+Metricas con framework
+
+1° Modelo - Redes neuronales con PCA
+
+Épocas ejecutadas: 500
+
+--- Métricas finales ---
+RMSE train:      298.4142
+RMSE validation: 307.4277
+RMSE test:       299.9672
+
+R2 train:       0.7859
+R2 validation:  0.7743
+R2 test:        0.7726
+
+Gap RMSE (val - train):  9.0135
+Gap RMSE (test - train): 1.5531
+Gap R2 (train - val):   0.0116
+Gap R2 (train - test):  0.0133

@@ -1,0 +1,22 @@
+Metricas sin framework
+
+(8465, 15)
+features: ['Hour', 'Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)', 'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)', 'Seasons_Autumn', 'Seasons_Spring', 'Seasons_Summer', 'Seasons_Winter', 'Holiday_Holiday', 'Holiday_No Holiday']
+num samples: 8465 | num params: 15
+train: 5079 | validation: 1693 | test: 1693
+épocas: 10000
+parámetros finales: [200.14923218685152, 28.42084745348899, 315.85274504060885, -168.13528501116323, 14.258005507164313, 6.93718662184561, -70.87976819646921, -64.34061745240689, 14.083021829387741, 204.811760385881, 76.64162875083562, 72.97676501081442, -154.28092196068087, 45.004599329687764, 155.14463285716562]
+
+--- Métricas finales ---
+RMSE train:      428.8179
+RMSE validation: 451.0231
+RMSE test:       437.7718
+
+R2 train:       0.5398
+R2 validation:  0.5325
+R2 test:        0.5517
+
+Gap RMSE (val - train):  22.2052
+Gap RMSE (test - train): 8.9539
+Gap R2 (train - val):   0.0073
+Gap R2 (train - test):  -0.0119
