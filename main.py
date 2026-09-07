@@ -123,8 +123,14 @@ rmse_test_list = []
 show_errors(params, samples_test, y_test, rmse_test_list)
 rmse_test = rmse_test_list[0]
 
+r2_train = r2_score(params, samples_train, y_train)
+r2_val = r2_score(params, samples_val, y_val)
+r2_test = r2_score(params, samples_test, y_test)
+
 gap_rmse_val = rmse_val - rmse_train
 gap_rmse_test = rmse_test - rmse_train
+gap_r2_val = r2_train - r2_val
+gap_r2_test = r2_train - r2_test
 
 print("\n--- Métricas finales ---")
 print(f"RMSE train:      {rmse_train:.4f}")
