@@ -4,9 +4,6 @@ import random
 
 df_model = pd.read_csv('seoul-clean.csv')
 
-if 'Date' in df_model.columns:
-    df_model = df_model.drop(columns=['Date'])
-
 print(df_model.shape)
 df_model.head()
 
@@ -30,7 +27,8 @@ def show_errors(params, samples, y, errors_list, verbose=False):
         error = hyp - y[i]
         error_acum += error ** 2 
     mean_error_param = error_acum / len(samples)
-    errors_list.append(mean_error_param)
+    rmse = mean_error_param ** 0.5 
+    errors_list.append(rmse)
 
 def GD(params, samples, y, alfa):
     """Un paso de descenso de gradiente sobre todos los parámetros"""
@@ -42,6 +40,14 @@ def GD(params, samples, y, alfa):
             acum = acum + error * samples[i][j]
         temp[j] = params[j] - alfa * (1 / len(samples)) * acum
     return temp
+
+def r2_score(params, samples, y):
+    """Calcula R^2 manualmente para un conjunto dado"""
+    predictions = [h(params, s) for s in samples]
+    y_mean = sum(y) / len(y)
+    ss_res = sum((real - pred) ** 2 for pred, real in zip(y, predictions))
+    ss_tot = sum((real - y_mean) ** 2 for real in y)
+    return 1 - (ss_res / ss_tot)
 
 target_col = 'Rented Bike Count'
 feature_cols = [c for c in df_model.columns if c != target_col]
@@ -80,7 +86,7 @@ print("train:", len(samples_train), "| validation:", len(samples_val), "| test:"
 params = [0] * len(samples_train[0])
 alfa = 0.01
 tolerancia = 1e-6
-max_epochs = 2000
+max_epochs = 10000
 
 epochs = 0
 while True:
@@ -105,16 +111,49 @@ plt.title("Curva de error - Gradiente Descendente")
 plt.legend()
 plt.show()
 
-predictions = [h(params, s) for s in samples_test]
+rmse_train_list = []
+show_errors(params, samples_train, y_train, rmse_train_list)
+rmse_train = rmse_train_list[0]
 
-# MSE manual
-mse = sum((pred - real) ** 2 for pred, real in zip(predictions, y_test)) / len(y_test)
+rmse_val_list = []
+show_errors(params, samples_val, y_val, rmse_val_list)
+rmse_val = rmse_val_list[0]
 
-# R^2 manual: 1 - (suma de errores^2 / suma de (y - media(y))^2)
-y_mean = sum(y_test) / len(y_test)
-ss_res = sum((real - pred) ** 2 for pred, real in zip(predictions, y_test))
-ss_tot = sum((real - y_mean) ** 2 for real in y_test)
-r2 = 1 - (ss_res / ss_tot)
+rmse_test_list = []
+show_errors(params, samples_test, y_test, rmse_test_list)
+rmse_test = rmse_test_list[0]
 
-print("MSE en test:", mse)
-print("R2 en test:", r2)
+gap_rmse_val = rmse_val - rmse_train
+gap_rmse_test = rmse_test - rmse_train
+
+print("\n--- Métricas finales ---")
+print(f"RMSE train:      {rmse_train:.4f}")
+print(f"RMSE validation: {rmse_val:.4f}")
+print(f"RMSE test:       {rmse_test:.4f}")
+print()
+print(f"R2 train:       {r2_train:.4f}")
+print(f"R2 validation:  {r2_val:.4f}")
+print(f"R2 test:        {r2_test:.4f}")
+print()
+print(f"Gap RMSE (val - train):  {gap_rmse_val:.4f}")
+print(f"Gap RMSE (test - train): {gap_rmse_test:.4f}")
+print(f"Gap R2 (train - val):   {gap_r2_val:.4f}")
+print(f"Gap R2 (train - test):  {gap_r2_test:.4f}")
+
+# Gráfica: Predicciones vs Valores Reales (test set)
+predictions_test = [h(params, s) for s in samples_test]
+
+plt.figure(figsize=(6, 6))
+plt.scatter(y_test, predictions_test, alpha=0.4, edgecolors='k', linewidths=0.3)
+
+# Línea de referencia y = x (predicción perfecta)
+min_val = min(min(y_test), min(predictions_test))
+max_val = max(max(y_test), max(predictions_test))
+plt.plot([min_val, max_val], [min_val, max_val], 'r--', label="Predicción perfecta (y=x)")
+
+plt.xlabel("Valor real")
+plt.ylabel("Predicción")
+plt.title("Predicciones vs Valores Reales (Test)")
+plt.legend()
+plt.tight_layout()
+plt.show()
