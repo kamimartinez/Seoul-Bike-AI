@@ -1,11 +1,11 @@
 # Seoul Bike Sharing Demand 
-## Implementación de una técnica de aprendizaje máquina sin el uso de un framework
+## Implementación de una técnica de aprendizaje máquina 
 
 **[Ver el paper: Evidencia01_ConcentracionIA_A01711833](./Evidencia01_ConcentracionIA_A01711833.pdf)**
 
 ## Descripción
 
-Este proyecto implementa un modelo de regresión lineal múltiple, entrenado mediante descenso de gradiente para predecir la demanda horaria de bicicletas rentadas en Seúl a partir de variables climáticas y de calendario.
+Este proyecto implementa dos enfoques de modelado para predecir la demanda horaria de bicicletas rentadas en Seúl a partir de variables climáticas y de calendario: una regresión lineal múltiple entrenada mediante descenso de gradiente, implementada desde cero sin frameworks de machine learning, y una red neuronal con reducción de dimensionalidad mediante PCA.
 
 El dataset utilizado es [Seoul Bike Sharing Demand](https://archive.ics.uci.edu/dataset/560/seoul+bike+sharing+demand), del UCI Machine Learning Repository.
 
@@ -13,11 +13,16 @@ El dataset utilizado es [Seoul Bike Sharing Demand](https://archive.ics.uci.edu/
 
 - Python 3.x
 - pandas
+- numpy
+- matplotlib
+- seaborn
+- scikit-learn
+- tensorflow
 
 Instalación de dependencias:
 
 ```bash
-pip install pandas
+pip install pandas numpy matplotlib seaborn scikit-learn tensorflow
 ```
 
 ## Uso
@@ -31,10 +36,16 @@ El proyecto se ejecuta en dos pasos, en este orden:
    python cleaning.py
    ```
 
-2. **Entrenamiento del modelo** entrena el modelo y muestra las métricas de evaluación (MSE, R²):
+2. **Entrenamiento del modelo sin framework** entrena el modelo y muestra las métricas de evaluación (RMSE, R²):
 
    ```bash
    python main.py
    ```
 
-> ojito, `main.py` depende del archivo generado por `cleaning.py`, así que es necesario correr `cleaning.py` primero.
+3. **Entrenamiento del modelo con framework** entrena el modelo y muestra las métricas de evaluación (RMSE, R²):
+
+   ```bash
+   python main-framework.py
+   ```
+
+> ojito, `main.py` y `main-framework.py` depende del archivo generado por `cleaning.py`, así que es necesario correr `cleaning.py` primero.

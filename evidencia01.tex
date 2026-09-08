@@ -371,6 +371,7 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 
 
+\usepackage{url}
 \begin{document}
 %
 % paper title
@@ -469,12 +470,12 @@ Seoul Bike Sharing Demand Dataset}
 % in the abstract or keywords.
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-Este trabajo presenta un análisis exploratorio de datos y la implementación desde cero, sin frameworks de machine learning, de un modelo de regresión lineal múltiple mediante descenso de gradiente para predecir la demanda horaria de bicicletas rentadas en Seúl a partir de variables climáticas y de calendario. Los datos se dividieron en conjuntos de entrenamiento, validación y prueba. El modelo obtuvo un R² de 0.55 en el conjunto de prueba, es decir, las variables utilizadas logran explicar poco más de la mitad de la variabilidad en la demanda. Esto sugiere que la relación entre el clima y la demanda no es completamente lineal.
+Este trabajo presenta la implementación de dos modelos para predecir la demanda horaria de bicicletas rentadas en Seúl a partir de variables climáticas y de calendario: una regresión lineal múltiple mediante descenso de gradiente, sin frameworks, y una red neuronal con PCA . Los datos se dividieron en 60\% entrenamiento, 20\% validación y 20\% prueba. El modelo lineal obtuvo un R² de 0.5464 y un RMSE de 440.37 en prueba, con bias alto y varianza baja, característico de underfitting. El modelo de red neuronal obtuvo un R² de 0.8510 y un RMSE de 242.80, con un bias menor, aunque con un ligero aumento en la varianza al extender el entrenamiento de 200 a 500 épocas. Esto sugiere que la relación entre el clima y la demanda no es completamente lineal.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-instancias
+regresión lineal, redes neuronales, descenso de gradiente, PCA, regularización, bias, varianza
 \end{IEEEkeywords}}
 
 
@@ -643,7 +644,7 @@ Para nuestro conjunto de datos realizamos una matriz de correlación, visualizad
     \label{fig:matrizcorr}
 \end{figure}
 
-Al observar la matriz de correlación (Figura~\ref{fig:heatmap}), destaca que Temperature(°C) y Dew point temperature(°C) están casi perfectamente correlacionadas, 0.91, lo cual indica multicolinealidad \cite{ibm_multi}. Estas pueden afectar negativamente nuestro modelo de predicción, por lo cual estaremos eligiendo solo una.
+Al observar la matriz de correlación, destaca que Temperature(°C) y Dew point temperature(°C) están casi perfectamente correlacionadas, 0.91, lo cual indica multicolinealidad \cite{ibm_multi}. Estas pueden afectar negativamente nuestro modelo de predicción, por lo cual estaremos eligiendo solo una.
 
 En cuanto a la variable objetivo, Rented Bike Count se correlaciona más con Temperature(°C) (0.54), Hour (0.41) y Dew point temperature(°C) (0.38), lo que sugiere que la temperatura y la hora del día son, hasta este punto del análisis, las características con relación más fuerte a la demanda de bicicletas. Por su parte, Humidity(\%) presenta una correlación negativa tanto con Rented Bike Count (-0.20) como con Hour (-0.24), y también se correlaciona negativamente con Visibility (10m) (-0.54), lo que indica que los días más húmedos tienden a presentar menor visibilidad y una demanda de bicicletas  menor.
 
@@ -679,7 +680,19 @@ La estandarización de los datos permite realizar comparaciones justas entre var
 \item Snowfall (cm)
 \end{itemize}
 
-Actualmente, me encuentro analizando si estandarizar también la variable Hour mejoraría el desempeño del modelo, dado que se trata de una variable cíclica y, por lo tanto, su escala podría afectar de forma distinta. Esta es una hipótesis que planeo demostrar en trabajo futuro.
+\subsubsection{Codificación cíclica de Hour}
+Bajo una representación lineal, la hora 23 y la hora 0 se encuentran en extremos opuestos del rango de valores, cuando en realidad son consecutivas en el tiempo. 
+
+Para resolver esto, se aplicó una codificación cíclica mediante funciones seno y coseno, transformando cada valor de Hour en un ángulo dentro de un círculo:
+
+\begin{equation}
+Hour_{sin} = \sin\left(\frac{2\pi \cdot Hour}{24}\right), \quad Hour_{cos} = \cos\left(\frac{2\pi \cdot Hour}{24}\right)
+\label{eq:cyclic}
+\end{equation}
+
+Esta transformación preserva la contigüidad entre valores consecutivos del ciclo, de forma que la hora 23 queda cerca de la hora 0, como un reloj. 
+
+Es importante utilizar siempre ambos componentes, seno y coseno, en conjunto, ya que el seno por sí solo pierde información de orientación, dado que dos horas distintas pueden compartir el mismo valor de seno \cite{cyclic}. 
 
 \subsubsection{One-Hot Encoding}
 Para las variables categóricas, se llevó a cabo una codificación One-Hot Encoding. En este tipo de técnica, cada categoría se representa mediante un vector de $N$ elementos, donde $N$ corresponde al número total de categorías posibles. Dentro de este vector, exactamente un elemento toma el valor de 1, mientras que todos los demás permanecen en 0 \cite{onehot}.
@@ -751,20 +764,19 @@ donde $\alpha$ es la tasa de aprendizaje (\textit{learning rate}), la cual contr
 \subsection{Entrenamiento del modelo}
 Para entrenar el modelo, el conjunto de datos se dividió previamente en tres subconjuntos: entrenamiento, validación y prueba, en una proporción de 60\%, 20\% y 20\% respectivamente. El modelo se entrenó únicamente con el conjunto de entrenamiento, mientras que el conjunto de validación se utilizó para vigilar su desempeño durante el proceso, sin influir directamente en la actualización de los parámetros. El conjunto de prueba se mantuvo completamente al margen del entrenamiento, con el fin de reservarlo para la evaluación final del modelo.
 
-El entrenamiento se realizó con una tasa de aprendizaje $\alpha = 0.01$, deteniéndose cuando el cambio máximo entre los parámetros de una época y la siguiente fue menor a una tolerancia de $1\times10^{-6}$, o al alcanzar un máximo de 10,000 épocas.
+El entrenamiento se realizó con una tasa de aprendizaje $\alpha = 0.01$, deteniéndose cuando el cambio máximo entre los parámetros de una época y la siguiente fue menor a una tolerancia de $1\times10^{-6}$, o al alcanzar el número máximo de épocas 
+definido para cada corrida.
 
 
 \section{Métricas de evaluación}
 
-\subsection{Error Cuadrático Medio (MSE)}
-Representa el promedio de las diferencias al cuadrado entre los valores predichos y los valores reales \cite{funcion_costo}:
-
+\subsection{Raíz del Error Cuadrático Medio (RMSE)}
+El RMSE representa la raíz cuadrada del promedio de las diferencias al cuadrado entre los valores pronosticados y los valores reales, siendo matemáticamente equivalente a la desviación estándar de los residuos del modelo \cite{funcion_costo}:
 \begin{equation}
-MSE = \frac{1}{m}\sum_{i=1}^{m} \left( h_\theta(x^{(i)}) - y^{(i)} \right)^2
-\label{eq:mse}
+RMSE = \sqrt{\frac{1}{m}\sum_{i=1}^{m} \left( h_\theta(x^{(i)}) - y^{(i)} \right)^2}
+\label{eq:rmse}
 \end{equation}
-
-Al elevar al cuadrado las diferencias, el MSE penaliza con mayor severidad los errores grandes en comparación con los pequeños.
+A diferencia del MSE, el RMSE se expresa en las mismas unidades que la variable dependiente, lo que facilita su interpretación directa. Al elevar al cuadrado las diferencias antes de sacar la raíz, el RMSE penaliza con mayor severidad los errores grandes en comparación con los pequeños.
 
 \subsection{Coeficiente de Determinación (R\textsuperscript{2})}
 El coeficiente de determinación (R\textsuperscript{2}) indica la cantidad proporcional de variación en la variable de respuesta $y$ explicada por las variables independientes $X$ en el modelo de regresión lineal \cite{r2}.
@@ -776,64 +788,217 @@ R^2 = 1 - \frac{SSE}{SST}
 
 donde $SSE$ es la suma de cuadrados del error, la diferencia entre los valores predichos y los reales, y $SST$ es la suma de cuadrados total, la diferencia entre los valores reales y su media \cite{sss}. 
 
+\subsection{Bias}
+
+El bias, también conocido como sesgo, es el error que resulta de la diferencia entre las predicciones promedio de un modelo y los valores reales que se buscan estimar \cite{bias01}. Un bias alto indica que el modelo es demasiado simple para capturar los patrones en los datos, produciendo predicciones erróneas incluso con datos de entrenamiento distintos. Por el contrario, un bias bajo indica que el modelo logra aproximarse consistentemente a los valores reales, capturando adecuadamente la relación entre las variables predictoras y la variable objetivo \cite{bias02}.
+
+
+\subsection{Varianza}
+
+La varianza es el error que refleja qué tan sensible es un modelo a las variaciones específicas del conjunto de datos de entrenamiento con el que fue construido \cite{bias01}. Una varianza alta indica que el modelo se ajusta demasiado a las particularidades del conjunto de entrenamiento específico, lo que provoca que su desempeño se empeore al evaluarlo con datos nuevos que no vio durante el entrenamiento \cite{bias02}. En cambio, una varianza baja indica que el modelo es estable, sus predicciones no cambian drásticamente entre distintos conjuntos de entrenamiento.
+
+\subsection{Overfitting y Underfitting}
+
+El underfitting y el overfitting están directamente determinados por el balance entre bias y varianza de un modelo \cite{ibm01}. El underfitting es característico de modelos con bias alto y varianza baja. Al ser demasiado simples, generan predicciones alejadas del valor real, de ahí el bias alto, pero esa misma simplicidad hace que las predicciones apenas cambien entre distintos conjuntos de entrenamiento, lo que resulta en varianza baja. Por el contrario, el overfitting es característico de modelos con bias bajo y varianza alta. La alta flexibilidad del modelo le permite ajustarse muy de cerca a los datos de entrenamiento, pero esa misma flexibilidad hace que el modelo memorice particularidades específicas de cada conjunto de datos, generando predicciones muy distintas ante datos nuevos y, por lo tanto, varianza alta. El objetivo de un buen ajuste es encontrar el punto donde ambos errores se mantienen bajos de forma simultánea, evitando los dos extremos.
+
+\subsection{Regularización}
+
+La regularización es una técnica que busca reducir el riesgo de overfitting al restringir la complejidad de un modelo, evitando que se ajuste excesivamente a los casos específicos del conjunto de entrenamiento \cite{ibm01}. Krogh y Hertz \cite{weight} demostraron que penalizar el crecimiento de los pesos durante el entrenamiento mejora la capacidad de generalización de una red neuronal. En el caso de weight decay, esto se logra agregando un término a la función de costo que penaliza los pesos grandes, de forma que el modelo prefiera soluciones más simples.
+
 \section{Resultados}
 \label{sec:resultados}
+\subsection{Sin framework}
 El modelo se evaluó de forma iterativa, ajustando dos aspectos del proceso de entrenamiento a partir de los resultados obtenidos: el número de épocas y la inclusión de las instancias con Functioning Day = No.
 
-En una primera corrida, el modelo se entrenó durante 2,000 épocas, utilizando todavía el conjunto de datos completo (8,760 instancias, 17 variables), es decir, sin haber eliminado las instancias de las horas en las que teniamos Functioning Day = No. Esta corrida obtuvo un MSE de 196,584.73 y un R\textsuperscript{2} de 0.5352 en el conjunto de prueba. 
+En una primera corrida, el modelo se entrenó durante 1,000 épocas, utilizando todavía el conjunto de datos completo (8,760 instancias, 17 variables), es decir, sin haber eliminado las instancias de las horas en las que teníamos Functioning Day = No. Esta corrida obtuvo las siguientes métricas:
 
-\begin{figure} [H]
-    \centering
-    \includegraphics[width=1\linewidth]{Figure_1 2 mil epochs.png}
-    \caption{}
-    \label{fig:placeholder}
-\end{figure}
-
-
-Con el fin de verificar si el modelo aún no había concluido completamente, se incrementó el número de épocas a 10,000, manteniendo el resto del conjunto de datos sin cambios. El MSE disminuyó a 193,411.99 y el R\textsuperscript{2} aumentó ligeramente a 0.5427, lo que indica una mejora marginal y sugiere que el modelo se encontraba cerca de la convergencia incluso con 2,000 épocas.
-
-\begin{figure} [H]
-    \centering
-    \includegraphics[width=\linewidth]{Figure_1_.png}
-    \caption{}
-    \label{fig:placeholder}
-\end{figure}
-
-Finalmente, se eliminaron las instancias con Functioning Day = No, como se justificó en la Sección 2.3.3, reduciendo el conjunto de datos a 8,465 instancias y 15 variables (al eliminarse también las columnas dummy Functioning Day\_Yes y Functioning Day\_No, que quedaban constantes tras el filtro). Entrenando nuevamente con 10,000 épocas, el modelo obtuvo un MSE de 191,644.15 y un R\textsuperscript{2} de 0.5517, la mejor combinación de las tres corridas.
-
-\begin{figure} [H]
-    \centering
-    \includegraphics[width=1\linewidth]{Figure_1_10 mil epochs pero sin functioning day.png}
-    \caption{}
-    \label{fig:placeholder}
-\end{figure}
-
-La Tabla~\ref{tab:resultados} resume los resultados de las tres corridas.
-
-\begin{table}[H]
+\begin{table}[h]
 \centering
-\caption{Comparación de resultados entre corridas}
-\label{tab:resultados}
-\begin{tabular}{|c|c|c|c|c|}
+\caption{Resultados de la Corrida A (1,000 épocas, 8,760 instancias)}
+\label{tab:corridaA}
+\begin{tabular}{|l|c|}
 \hline
-\textbf{Corrida} & \textbf{Épocas} & \textbf{Instancias} & \textbf{MSE} & \textbf{R\textsuperscript{2}} \\
+\textbf{Métrica} & \textbf{Valor} \\
 \hline
-1 & 2,000 & 8,760 & 196,584.73 & 0.5352 \\
+RMSE train & 431.28 \\
+RMSE validation & 464.99 \\
+RMSE test & 454.64 \\
 \hline
-2 & 10,000 & 8,760 & 193,411.99 & 0.5427 \\
+R² train & 0.5377 \\
+R² validation & 0.5177 \\
+R² test & 0.5113 \\
 \hline
-3 & 10,000 & 8,465 & 191,644.15 & 0.5517 \\
+Gap RMSE (val - train) & 33.70 \\
+Gap RMSE (test - train) & 23.35 \\
+Gap R² (train - val) & 0.0200 \\
+Gap R² (train - test) & 0.0264 \\
 \hline
 \end{tabular}
 \end{table}
 
-Estos resultados muestran que, si bien aumentar el número de épocas mejoró ligeramente el desempeño del modelo, el cambio con mayor impacto fue la eliminación de las instancias con Functioning Day = No.
+En esta corrida se observa un bias alto y una varianza baja. El bias alto se evidencia tanto en el R\textsuperscript{2}, que se mantiene por debajo de 0.54 en los tres conjuntos, como en el RMSE, que se ubica alrededor de 430-465 en los tres casos. Esto indica que el modelo únicamente logra explicar poco más de la mitad de la variabilidad en la demanda de bicicletas, incluso en el conjunto con el que fue entrenado. La varianza, por su parte, se considera baja porque tanto la diferencia en R\textsuperscript{2}como la brecha en RMSE son pequeñas en relación con la magnitud total del error, lo que indica que el desempeño del modelo no cambia drásticamente al evaluarlo con datos que no vio durante el entrenamiento. Esta combinación de bias alto y varianza baja es característica de un modelo con underfitting.
 
+Con el fin de verificar si el modelo aún no había concluido completamente, se incrementó el número de épocas a 5,000, manteniendo el resto del conjunto de datos sin cambios.
+
+\begin{table}[h]
+\centering
+\caption{Resultados de la Corrida B (5,000 épocas, 8,760 instancias)}
+\label{tab:corridaB}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Métrica} & \textbf{Valor} \\
+\hline
+RMSE train & 424.14 \\
+RMSE validation & 456.07 \\
+RMSE test & 447.38 \\
+\hline
+R² train & 0.5529 \\
+R² validation & 0.5360 \\
+R² test & 0.5268 \\
+\hline
+Gap RMSE (val - train) & 31.93 \\
+Gap RMSE (test - train) & 23.25 \\
+Gap R² (train - val) & 0.0169 \\
+Gap R² (train - test) & 0.0261 \\
+\hline
+\end{tabular}
+\end{table}
+
+El RMSE disminuyó ligeramente en los tres conjuntos y el R\textsuperscript{2} aumentó un poco en todos los conjuntos de datos, lo que indica que con 1,000 épocas el modelo aún no había alcanzado la convergencia completa. Sin embargo, las brechas entre train y validation/test se mantuvieron en magnitudes similares a las de la Corrida A, lo que sugiere que aumentar el número de épocas mejoró el ajuste general del modelo sin modificar el balance entre bias y varianza. El underfitting identificado en la Corrida A se mantiene para esta corrida.
+
+Finalmente, se eliminaron las instancias con Functioning Day = No, como se justificó en la Sección 2.3.3, reduciendo el conjunto de datos a 8,465 instancias y 15 variables. Entrenando nuevamente con 5,000 épocas, el modelo obtuvo los siguientes resultados:
+
+\begin{table}[h]
+\centering
+\caption{Resultados de la Corrida C (5,000 épocas, 8,465 instancias, sin Functioning Day = No)}
+\label{tab:corridaC}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Métrica} & \textbf{Valor} \\
+\hline
+RMSE train & 432.69 \\
+RMSE validation & 448.65 \\
+RMSE test & 440.37 \\
+\hline
+R² train & 0.5314 \\
+R² validation & 0.5374 \\
+R² test & 0.5464 \\
+\hline
+Gap RMSE (val - train) & 15.95 \\
+Gap RMSE (test - train) & 7.67 \\
+Gap R² (train - val) & -0.0060 \\
+Gap R² (train - test) & -0.0149 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+En esta corrida, la brecha entre el RMSE de entrenamiento y el de validation/test disminuyó respecto a las corridas anteriores , y la diferencia en R\textsuperscript{2} se volvió incluso negativa, es decir, el modelo obtuvo un desempeño ligeramente mejor en validación y prueba que en el conjunto de entrenamiento. El bias, sin embargo, se mantiene alto en las tres corridas, ya que tanto el R\textsuperscript{2} como el RMSE no muestran una mejora sustancial en ningún conjunto, lo que refuerza la conclusión de que el modelo presenta underfitting frente a la relación real entre las variables climáticas y de calendario con la demanda de bicicletas.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=1\linewidth]{CURVA-ERROR-SIN-FRAMEWORK-5000-EPOCAS-CON-FUNCTIONINGDAY.png}
+    \caption{Curva de Error}
+    \label{fig:curva-error-sin-framework}
+\end{figure}
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=1\linewidth]{PREDICCIONES-SIN-FRAMEWORK-5000-EPOCAS-SIN-FUNCTIONING-DAY-FINAL.png}
+    \caption{Predicciones vs Valores Reales}
+    \label{fig:predicciones-sin-framework}
+\end{figure}
+
+Estos resultados muestran que, si bien aumentar el número de épocas mejoró ligeramente el desempeño del modelo, el cambio con mayor impacto fue la eliminación de las instancias con Functioning Day = No, lo cual redujo notablemente la brecha entre los conjuntos de entrenamiento, validación y prueba, sin resolver el problema de bias alto del modelo lineal.
+
+\subsection{Implementación con framework}
+\label{sec:framework}
+
+Con base en los hallazgos reportados en \cite{paper}, donde se desarrollaron modelos de estimación de tráfico ciclista diario en Portland, Oregón, se seleccionó una arquitectura de red neuronal con 589 neuronas en la capa oculta y función de activación ReLU, aplicando previamente un análisis de componentes principales (PCA) que retiene el 99\% de la varianza de los datos. Esta configuración corresponde a la combinación que reportó el mejor desempeño (menor RMSE) en \cite{paper}.
+
+Adicionalmente, se incorporó una técnica de regularización L2, weight decay, en la capa oculta de la red, con base en los hallazgos de Krogh y Hertz \cite{weight}, quienes demostraron que penalizar el crecimiento de los pesos durante el entrenamiento mejora la capacidad de generalización de una red neuronal. 
+
+
+El modelo se entrenó inicialmente con 200 épocas, dividiendo el conjunto de datos en 60\% entrenamiento, 20\% validación y 20\% prueba, la misma proporción utilizada en el modelo sin framework.
+
+\begin{table}[H]
+\centering
+\caption{Resultados del modelo de red neuronal con PCA (200 épocas)}
+\label{tab:frameworkNN}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Métrica} & \textbf{Valor} \\
+\hline
+RMSE train & 260.21 \\
+RMSE validation & 266.93 \\
+RMSE test & 263.14 \\
+\hline
+R² train & 0.8372 \\
+R² validation & 0.8299 \\
+R² test & 0.8250 \\
+\hline
+Gap RMSE (val - train) & 6.72 \\
+Gap RMSE (test - train) & 2.93 \\
+Gap R² (train - val) & 0.0074 \\
+Gap R² (train - test) & 0.0122 \\
+\hline
+\end{tabular}
+\end{table}
+
+A diferencia de las corridas del modelo sin framework, en este caso se observa un bias bajo. Esto se demuestra tanto en el R\textsuperscript{2}, que se encuentra por encima de 0.82 en los tres conjuntos, como en el RMSE, que se reduce a un rango de 260-267. Esto indica que el modelo logra explicar más del 82\% de la variabilidad en la demanda de bicicletas.
+
+La varianza también se mantiene baja. La diferencia en R\textsuperscript{2} entre entrenamiento y validación  y entre entrenamiento y prueba es mínima, al igual que la diferencia en RMSE. 
+
+La combinación de bias bajo y varianza baja indica que este modelo logra un buen ajuste, a diferencia del underfitting observado previamente en las tres corridas del modelo sin framework. Esto sugiere que la relación entre las variables climáticas y de calendario con la demanda de bicicletas efectivamente presenta componentes no lineales que el modelo de regresión lineal no fue capaz de capturar.
+
+Con el objetivo de explorar si un mayor número de épocas mejoraba el desempeño del modelo, se incrementó el entrenamiento de 200 a 500 épocas, manteniendo el resto de la configuración sin cambios. 
+
+\begin{table}[H]
+\centering
+\caption{Comparación del modelo de red neuronal con PCA a 200 y 500 épocas}
+\label{tab:frameworkNN-comparacion}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Métrica} & \textbf{200 épocas} & \textbf{500 épocas} \\
+\hline
+RMSE train & 260.21 & 228.87 \\
+RMSE validation & 266.93 & 243.79 \\
+RMSE test & 263.14 & 242.80 \\
+\hline
+R² train & 0.8372 & 0.8741 \\
+R² validation & 0.8299 & 0.8581 \\
+R² test & 0.8250 & 0.8510 \\
+\hline
+Gap RMSE (val - train) & 6.72 & 14.92 \\
+Gap RMSE (test - train) & 2.93 & 13.93 \\
+Gap R² (train - val) & 0.0074 & 0.0160 \\
+Gap R² (train - test) & 0.0122 & 0.0231 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+Al aumentar el número de épocas, tanto el RMSE como el R\textsuperscript{2} mejoraron en los tres conjuntos. Esto indica que el bias del modelo continuó disminuyendo con el entrenamiento adicional, logrando un mejor ajuste general.
+
+Sin embargo, es importante notar que las diferencias entre el conjunto de entrenamiento y los conjuntos de validación y prueba también aumentaron de forma notable. La brecha en RMSE (test - train) pasó de 2.93 a 13.93, y la brecha en R\textsuperscript{2} (train - test) pasó de 0.0122 a 0.0231. Este comportamiento es visible en la Figura 8, donde las curvas de entrenamiento y validación, que se mantenían prácticamente alineadas durante las primeras épocas, comienzan a separarse gradualmente conforme avanza el entrenamiento.
+
+\begin{figure} [H]
+    \centering
+    \includegraphics[width=1\linewidth]{CURVA-RMSE-500-EPOCAS-FRAMEWORK.png}
+    \caption{Curva de RMSE - 500 épocas}
+    \label{fig:placeholder}
+\end{figure}
+
+Este incremento en la diferencia sugiere que la varianza del modelo comenzó a aumentar conforme se extendió el entrenamiento. En otras palabras, entrenar por más tiempo continuó reduciendo el bias, pero a costa de un ligero aumento en la varianza, un comportamiento consistente con el inicio de un proceso de overfitting hacia las últimas épocas. 
 
 \section{Conclusión}
-En este trabajo se implementó un modelo de regresión lineal múltiple con el objetivo de predecir la demanda horaria de bicicletas rentadas en Seúl a partir de variables climáticas y de calendario. 
+En este trabajo se implementaron dos modelos para predecir la demanda horaria de bicicletas rentadas en Seúl a partir de variables climáticas y de calendario: una regresión lineal múltiple sin frameworks y una red neuronal con PCA.
 
-El modelo final, entrenado durante 10,000 épocas sobre el conjunto de datos depurado, obtuvo un R\textsuperscript{2} de 0.5517 y un MSE de 191,644.15 en el conjunto de prueba. Esto indica que las variables climáticas y de calendario consideradas logran explicar poco más de la mitad de la variabilidad observada en la demanda de bicicletas. 
+El modelo lineal, entrenado para 5,000 épocas sobre el conjunto de datos limpio, obtuvo un R² de 0.5464 y un RMSE de 440.37 en prueba. Las distintas corridas mostraron consistentemente un bias alto y una varianza baja, característico de underfitting.
+
+El modelo de red neuronal, entrenado para 500 épocas, obtuvo un R² de 0.8510 y un RMSE de 242.80 en prueba, con un bias considerablemente menor. Sin embargo, al extender el entrenamiento de 200 a 500 épocas, la diferencia entre entrenamiento y prueba también aumentó, sugiriendo un ligero incremento en la varianza.
+
+Estos resultados confirman que la relación entre las variables climáticas y de calendario con la demanda de bicicletas presenta componentes no lineales, y que una red neuronal permite modelarla de forma más precisa que una regresión lineal.
 
 
 
@@ -891,6 +1056,24 @@ GeeksforGeeks, “Gradient descent in linear regression,” GeeksforGeeks, Jun. 
 
 \bibitem{sss}
 I. Valchanov, “Sum of squares: SST, SSR, SSE,” 365 Data Science, Sep. 19, 2025. https://365datascience.com/tutorials/statistics-tutorials/sum-squares/
+
+\bibitem{paper}
+M. M. Miah, K. K. Hyun, S. P. Mattingly, and H. Khan, “Estimation of daily bicycle traffic using machine and deep learning techniques,” Transportation, vol. 50, no. 5, pp. 1631–1684, Apr. 2022, doi: 10.1007/s11116-022-10290-z.
+
+\bibitem{bias01}
+“Understanding the Bias-Variance tradeoff.” https://scott.fortmann-roe.com/docs/BiasVariance.html
+
+\bibitem{bias02}
+GeeksforGeeks, “Bias and variance in machine learning,” GeeksforGeeks, Dec. 12, 2025. https://www.geeksforgeeks.org/machine-learning/bias-vs-variance-in-machine-learning/
+
+\bibitem{ibm01}
+T. Mucci, “Overfitting vs. underfitting: Finding the balance,” Nov. 17, 2025. https://www.ibm.com/think/topics/overfitting-vs-underfitting
+
+\bibitem{weight}
+A. Krogh and J. Hertz, “A simple weight decay can improve generalization,” 1991. \url{https://share.google/kBKnEs99LLFjH8l4Z}
+
+\bibitem{cyclic}
+D. Radečić, “How to handle cyclical data in Machine Learning,” Towards Data Science, Jan. 27, 2025. https://towardsdatascience.com/how-to-handle-cyclical-data-in-machine-learning-3e0336f7f97c/
 
 \end{thebibliography}
 
