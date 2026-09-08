@@ -2,18 +2,58 @@ Metricas con framework
 
 1° Modelo - Redes neuronales con PCA
 
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┓
+┃ Layer (type)            ┃ Output Shape     ┃   Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━┩
+│ dense (Dense)           │ (None, 589)      │     7,657 │
+├─────────────────────────┼──────────────────┼───────────┤
+│ dense_1 (Dense)         │ (None, 1)        │       590 │
+└─────────────────────────┴──────────────────┴───────────┘
+ Total params: 8,247 (32.21 KB)
+ Trainable params: 8,247 (32.21 KB)
+ Non-trainable params: 0 (0.00 B)
+Épocas ejecutadas: 200
+
+--- Métricas finales ---
+RMSE train:      260.2106
+RMSE validation: 266.9277
+RMSE test:       263.1359
+
+R2 train:       0.8372
+R2 validation:  0.8299
+R2 test:        0.8250
+
+Gap RMSE (val - train):  6.7172
+Gap RMSE (test - train): 2.9254
+Gap R2 (train - val):   0.0074
+Gap R2 (train - test):  0.0122
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┓
+┃ Layer (type)            ┃ Output Shape     ┃   Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━┩
+│ dense (Dense)           │ (None, 589)      │     7,657 │
+├─────────────────────────┼──────────────────┼───────────┤
+│ dense_1 (Dense)         │ (None, 1)        │       590 │
+└─────────────────────────┴──────────────────┴───────────┘
+ Total params: 8,247 (32.21 KB)
+ Trainable params: 8,247 (32.21 KB)
+ Non-trainable params: 0 (0.00 B)
+
+AHORA CON MÁS EPOCAS
 Épocas ejecutadas: 500
 
 --- Métricas finales ---
-RMSE train:      298.4142
-RMSE validation: 307.4277
-RMSE test:       299.9672
+RMSE train:      228.8708
+RMSE validation: 243.7898
+RMSE test:       242.7982
 
-R2 train:       0.7859
-R2 validation:  0.7743
-R2 test:        0.7726
+R2 train:       0.8741
+R2 validation:  0.8581
+R2 test:        0.8510
 
-Gap RMSE (val - train):  9.0135
-Gap RMSE (test - train): 1.5531
-Gap R2 (train - val):   0.0116
-Gap R2 (train - test):  0.0133
+Gap RMSE (val - train):  14.9190
+Gap RMSE (test - train): 13.9274
+Gap R2 (train - val):   0.0160
+Gap R2 (train - test):  0.0231

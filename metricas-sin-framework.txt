@@ -1,48 +1,3 @@
-Metricas sin framework
-
-(8465, 15)
-features: ['Hour', 'Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)', 'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)', 'Seasons_Autumn', 'Seasons_Spring', 'Seasons_Summer', 'Seasons_Winter', 'Holiday_Holiday', 'Holiday_No Holiday']
-num samples: 8465 | num params: 15
-train: 5079 | validation: 1693 | test: 1693
-épocas: 10000
-parámetros finales: [200.14923218685152, 28.42084745348899, 315.85274504060885, -168.13528501116323, 14.258005507164313, 6.93718662184561, -70.87976819646921, -64.34061745240689, 14.083021829387741, 204.811760385881, 76.64162875083562, 72.97676501081442, -154.28092196068087, 45.004599329687764, 155.14463285716562]
-
---- Métricas finales ---
-RMSE train:      428.8179
-RMSE validation: 451.0231
-RMSE test:       437.7718
-
-R2 train:       0.5398
-R2 validation:  0.5325
-R2 test:        0.5517
-
-Gap RMSE (val - train):  22.2052
-Gap RMSE (test - train): 8.9539
-Gap R2 (train - val):   0.0073
-Gap R2 (train - test):  -0.0119
-
-METRICAS - 2000 EPOCAS - CON FUNCTIONING DAY
-
-(8760, 17)
-features: ['Hour', 'Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)', 'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)', 'Seasons_Autumn', 'Seasons_Spring', 'Seasons_Summer', 'Seasons_Winter', 'Holiday_Holiday', 'Holiday_No Holiday', 'Functioning Day_No', 'Functioning Day_Yes']
-num samples: 8760 | num params: 17
-train: 5256 | validation: 1752 | test: 1752
-épocas: 2000
-parámetros finales: [27.00232069684338, 26.571419556311486, 300.8025198135906, -154.1882259562991, 16.6677560798725, 11.360084776392283, -62.85270377219734, -65.46536418526668, 17.217827210345654, 130.31039474966377, 40.9585749350443, 43.28574649826738, -187.55239548613162, -33.486881542772934, 60.48920223961606, -298.1800469205082, 325.18236761735096]
-
---- Métricas finales ---
-RMSE train:      426.3542
-RMSE validation: 458.0949
-RMSE test:       443.3788
-
-R2 train:       0.5482
-R2 validation:  0.5319
-R2 test:        0.5352
-
-Gap RMSE (val - train):  31.7406
-Gap RMSE (test - train): 17.0245
-Gap R2 (train - val):   0.0163
-Gap R2 (train - test):  0.0130
 
 METRICAS 1000 EPOCAS - CON FUNCTIONING DAY - CON ESTANDARIZACION, INCLUYENDO HOUR
    
@@ -67,6 +22,8 @@ Gap RMSE (test - train): 23.3535
 Gap R2 (train - val):   0.0200
 Gap R2 (train - test):  0.0264
 
+
+
 METRICAS 5000 EPOCAS - CON FUNCTIONING DAY - CON ESTANDARIZACION, INCLUYENDO HOUR
 
 (8760, 18)
@@ -89,6 +46,9 @@ Gap RMSE (val - train):  31.9328
 Gap RMSE (test - train): 23.2465
 Gap R2 (train - val):   0.0169
 Gap R2 (train - test):  0.0261
+
+
+
 
 METRICAS 5000 EPOCAS - CON FUNCTIONING DAY - CON ESTANDARIZACION, INCLUYENDO HOUR
    
