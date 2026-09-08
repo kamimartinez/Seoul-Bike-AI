@@ -7,8 +7,8 @@ df_model = pd.read_csv('seoul-clean.csv')
 print(df_model.shape)
 df_model.head()
 
-__errors__ = []      # error de train en cada época
-__val_errors__ = []  # error de validation en cada época
+__errors__ = []
+__val_errors__ = []
 
 def h(params, sample):
     """Hipótesis lineal: h(x) = a + b*x1 + c*x2 + ... + n*xn"""
@@ -18,7 +18,7 @@ def h(params, sample):
     return acum
 
 def show_errors(params, samples, y, errors_list, verbose=False):
-    """Calcula el error cuadrático medio con los parámetros actuales y lo guarda en errors_list"""
+    """Calcula el RMSE con los parámetros actuales y lo guarda en errors_list"""
     error_acum = 0
     for i in range(len(samples)):
         hyp = h(params, samples[i])
@@ -53,14 +53,12 @@ target_col = 'Rented Bike Count'
 feature_cols = [c for c in df_model.columns if c != target_col]
 
 y = df_model[target_col].tolist()
-samples = df_model[feature_cols].values.tolist()
-
-samples = [[1] + row for row in samples]
+samples = df_model[feature_cols].values.tolist()  
 
 print("features:", feature_cols)
-print("num samples:", len(samples), "| num params:", len(samples[0]))
+print("num samples:", len(samples), "| num features:", len(feature_cols))
 
-
+# Split de índices train/val/test
 random.seed(42)
 idx = list(range(len(samples)))
 random.shuffle(idx)
@@ -71,6 +69,28 @@ val_end = int(len(idx) * 0.8)  # 0.6 + 0.2
 train_idx = idx[:train_end]
 val_idx = idx[train_end:val_end]
 test_idx = idx[val_end:]
+
+# Estandarización manual
+cols_to_standardize = [
+    'Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)',
+    'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)'
+]
+idx_to_standardize = [feature_cols.index(c) for c in cols_to_standardize if c in feature_cols]
+
+means = {}
+stds = {}
+for col_idx in idx_to_standardize:
+    train_values = [samples[i][col_idx] for i in train_idx]
+    mu = sum(train_values) / len(train_values)
+    sigma = (sum((v - mu) ** 2 for v in train_values) / len(train_values)) ** 0.5
+    means[col_idx] = mu
+    stds[col_idx] = sigma
+
+for row in samples:
+    for col_idx in idx_to_standardize:
+        row[col_idx] = (row[col_idx] - means[col_idx]) / stds[col_idx]
+
+samples = [[1] + row for row in samples]
 
 samples_train = [samples[i] for i in train_idx]
 y_train = [y[i] for i in train_idx]
@@ -83,10 +103,11 @@ y_test = [y[i] for i in test_idx]
 
 print("train:", len(samples_train), "| validation:", len(samples_val), "| test:", len(samples_test))
 
+# Entrenamiento
 params = [0] * len(samples_train[0])
 alfa = 0.01
 tolerancia = 1e-6
-max_epochs = 2000
+max_epochs = 5000
 
 epochs = 0
 while True:
@@ -106,11 +127,12 @@ while True:
 plt.plot(__errors__, label="train")
 plt.plot(__val_errors__, label="validation")
 plt.xlabel("Época")
-plt.ylabel("Error (MSE)")
+plt.ylabel("Error (RMSE)")
 plt.title("Curva de error - Gradiente Descendente")
 plt.legend()
 plt.show()
 
+# Métricas finales
 rmse_train_list = []
 show_errors(params, samples_train, y_train, rmse_train_list)
 rmse_train = rmse_train_list[0]

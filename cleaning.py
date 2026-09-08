@@ -1,6 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
 df = pd.read_csv('SeoulBikeData.csv', encoding='unicode_escape')
 print(df.head())
@@ -26,12 +27,12 @@ print(df['Functioning Day'].unique())
 print(df[df['Functioning Day'] == 'No']['Rented Bike Count'].describe())
 
 
-# before = len(df)
-# df = df[df['Functioning Day'] == 'Yes'].reset_index(drop=True)
-# df = df.drop(columns=['Functioning Day'])
+before = len(df)
+df = df[df['Functioning Day'] == 'Yes'].reset_index(drop=True)
+df = df.drop(columns=['Functioning Day'])
 
-# print(f"filas eliminadas: {before - len(df)}")
-# print(df.shape)
+print(f"filas eliminadas: {before - len(df)}")
+print(df.shape)
 
 df_clean = pd.get_dummies(df, columns=['Seasons', 'Holiday'], dtype=int)
 
@@ -59,18 +60,25 @@ plt.show()
 df_final = df_clean.drop(columns=['Dew point temperature(°C)', 'Date'])
 print(df_final.head())
 
+# Estandarización de Hour al ser una variable ciclica
+df_final['Hour_sin'] = np.sin(2 * np.pi * df_final['Hour'] / 24)
+df_final['Hour_cos'] = np.cos(2 * np.pi * df_final['Hour'] / 24)
+df_final = df_final.drop(columns=['Hour'])
+
+print(df_final[['Hour_sin', 'Hour_cos']].describe())
+
 # Estandarización de variables 
 # Excluyendo Hour, Rented Bike Count y las variables categoricas
-cols_standarization = [ 'Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)',
-    'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)'
-]
+# cols_standarization = [ 'Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)',
+#     'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)'
+# ]
 
-for col in cols_standarization:
-    mu = df_final[col].mean()
-    sigma = df_final[col].std()
-    df_final[col] = (df_final[col] - mu) / sigma
+# for col in cols_standarization:
+#     mu = df_final[col].mean()
+#     sigma = df_final[col].std()
+#     df_final[col] = (df_final[col] - mu) / sigma
 
-print(df_final[cols_standarization].describe())
+# print(df_final[cols_standarization].describe())
 
 # Exportar nuevo dataset "limpio"
 

@@ -20,3 +20,95 @@ Gap RMSE (val - train):  22.2052
 Gap RMSE (test - train): 8.9539
 Gap R2 (train - val):   0.0073
 Gap R2 (train - test):  -0.0119
+
+METRICAS - 2000 EPOCAS - CON FUNCTIONING DAY
+
+(8760, 17)
+features: ['Hour', 'Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)', 'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)', 'Seasons_Autumn', 'Seasons_Spring', 'Seasons_Summer', 'Seasons_Winter', 'Holiday_Holiday', 'Holiday_No Holiday', 'Functioning Day_No', 'Functioning Day_Yes']
+num samples: 8760 | num params: 17
+train: 5256 | validation: 1752 | test: 1752
+épocas: 2000
+parámetros finales: [27.00232069684338, 26.571419556311486, 300.8025198135906, -154.1882259562991, 16.6677560798725, 11.360084776392283, -62.85270377219734, -65.46536418526668, 17.217827210345654, 130.31039474966377, 40.9585749350443, 43.28574649826738, -187.55239548613162, -33.486881542772934, 60.48920223961606, -298.1800469205082, 325.18236761735096]
+
+--- Métricas finales ---
+RMSE train:      426.3542
+RMSE validation: 458.0949
+RMSE test:       443.3788
+
+R2 train:       0.5482
+R2 validation:  0.5319
+R2 test:        0.5352
+
+Gap RMSE (val - train):  31.7406
+Gap RMSE (test - train): 17.0245
+Gap R2 (train - val):   0.0163
+Gap R2 (train - test):  0.0130
+
+METRICAS 1000 EPOCAS - CON FUNCTIONING DAY - CON ESTANDARIZACION, INCLUYENDO HOUR
+   
+(8760, 18)
+features: ['Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)', 'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)', 'Seasons_Autumn', 'Seasons_Spring', 'Seasons_Summer', 'Seasons_Winter', 'Holiday_Holiday', 'Holiday_NoHoliday', 'Functioning Day_No', 'Functioning Day_Yes', 'Hour_sin', 'Hour_cos']
+num samples: 8760 | num features: 17
+train: 5256 | validation: 1752 | test: 1752
+épocas: 1000
+parámetros finales: [180.14433740931625, 285.28735592363006, -115.87915011463727, -4.122037265121695, 26.986144782552802, -64.37236985273458, -73.94864604130768, 11.447169422194072, 142.8549306726356, 78.00930906816225, 86.66391358534472, -127.38381591682699, 20.901373822907193, 159.2429635864088, -156.85549849141017, 336.99983590072645, -283.1507746236334, -45.9300306333262]
+
+--- Métricas finales ---
+RMSE train:      431.2820
+RMSE validation: 464.9860
+RMSE test:       454.6355
+
+R2 train:       0.5377
+R2 validation:  0.5177
+R2 test:        0.5113
+
+Gap RMSE (val - train):  33.7040
+Gap RMSE (test - train): 23.3535
+Gap R2 (train - val):   0.0200
+Gap R2 (train - test):  0.0264
+
+METRICAS 5000 EPOCAS - CON FUNCTIONING DAY - CON ESTANDARIZACION, INCLUYENDO HOUR
+
+(8760, 18)
+features: ['Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)', 'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)', 'Seasons_Autumn', 'Seasons_Spring', 'Seasons_Summer', 'Seasons_Winter', 'Holiday_Holiday', 'Holiday_NoHoliday', 'Functioning Day_No', 'Functioning Day_Yes', 'Hour_sin', 'Hour_cos']
+num samples: 8760 | num features: 17
+train: 5256 | validation: 1752 | test: 1752
+épocas: 5000
+parámetros finales: [112.87913492457508, 268.6300911076484, -129.11808334738944, -3.177731165357855, 22.03382728584542, -94.67953352170164, -75.55742965954407, 13.50101630247628, 172.66321827872844, 65.40254500146737, 90.08460576968976, -215.2712341253118, 6.74454288260629, 106.13459204196853, -369.29786332313637, 482.17699824771177, -293.4249426338289, -82.57908469871654]
+
+--- Métricas finales ---
+RMSE train:      424.1377
+RMSE validation: 456.0705
+RMSE test:       447.3842
+
+R2 train:       0.5529
+R2 validation:  0.5360
+R2 test:        0.5268
+
+Gap RMSE (val - train):  31.9328
+Gap RMSE (test - train): 23.2465
+Gap R2 (train - val):   0.0169
+Gap R2 (train - test):  0.0261
+
+METRICAS 5000 EPOCAS - CON FUNCTIONING DAY - CON ESTANDARIZACION, INCLUYENDO HOUR
+   
+(8465, 16)
+features: ['Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)', 'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)', 'Seasons_Autumn', 'Seasons_Spring', 'Seasons_Summer', 'Seasons_Winter', 'Holiday_Holiday', 'Holiday_NoHoliday', 'Hour_sin', 'Hour_cos']
+num samples: 8465 | num features: 15
+train: 5079 | validation: 1693 | test: 1693
+épocas: 5000
+parámetros finales: [386.25935540287145, 289.6220206324349, -148.2938842293593, -5.395391856163021, 17.193804873362545, -101.07002753294348, -71.41765662080365, 11.095706689584585, 245.28560307794393, 130.32682961935288, 148.48948425201246, -137.8425615464378, 141.19949736368625, 245.05985803918563, -290.1758189926108, -77.69925755656064]
+
+--- Métricas finales ---
+RMSE train:      432.6949
+RMSE validation: 448.6454
+RMSE test:       440.3683
+
+R2 train:       0.5314
+R2 validation:  0.5374
+R2 test:        0.5464
+
+Gap RMSE (val - train):  15.9505
+Gap RMSE (test - train): 7.6734
+Gap R2 (train - val):   -0.0060
+Gap R2 (train - test):  -0.0149

@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.compose import ColumnTransformer
 from sklearn.decomposition import PCA
 from sklearn.metrics import mean_squared_error, r2_score
 
@@ -31,11 +32,24 @@ X_val, X_test, y_val, y_test = train_test_split(
 
 print("train:", len(X_train), "| validation:", len(X_val), "| test:", len(X_test))
 
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_val_scaled = scaler.transform(X_val)
-X_test_scaled = scaler.transform(X_test)
+cols_to_standardize = [
+    'Temperature(°C)', 'Humidity(%)', 'Wind speed (m/s)',
+    'Visibility (10m)', 'Solar Radiation (MJ/m2)', 'Rainfall(mm)', 'Snowfall (cm)'
+]
 
+idx_to_standardize = [feature_cols.index(c) for c in cols_to_standardize if c in feature_cols]
+idx_passthrough = [i for i in range(len(feature_cols)) if i not in idx_to_standardize]
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('scaler', StandardScaler(), idx_to_standardize),
+    ],
+    remainder='passthrough' 
+)
+
+X_train_scaled = preprocessor.fit_transform(X_train)
+X_val_scaled = preprocessor.transform(X_val)
+X_test_scaled = preprocessor.transform(X_test)
 
 pca = PCA(n_components=0.99, random_state=42)
 X_train_pca = pca.fit_transform(X_train_scaled)
@@ -48,7 +62,7 @@ def get_model(input_shape, weight_decay=0.0001):
     model = Sequential([
         Dense(589, input_shape=input_shape, activation="relu",
               kernel_regularizer=regularizers.l2(weight_decay)),
-        Dense(1, activation="linear") 
+        Dense(1, activation="linear")
     ])
     return model
 
