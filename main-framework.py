@@ -65,7 +65,7 @@ model.summary()
 history = model.fit(
     X_train_pca, y_train,
     validation_data=(X_val_pca, y_val),
-    epochs=500,
+    epochs=200,
     batch_size=32,
     verbose=0
 )

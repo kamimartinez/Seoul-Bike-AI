@@ -25,12 +25,13 @@ print(df['Functioning Day'].unique())
 
 print(df[df['Functioning Day'] == 'No']['Rented Bike Count'].describe())
 
-before = len(df)
-df = df[df['Functioning Day'] == 'Yes'].reset_index(drop=True)
-df = df.drop(columns=['Functioning Day'])
 
-print(f"filas eliminadas: {before - len(df)}")
-print(df.shape)
+# before = len(df)
+# df = df[df['Functioning Day'] == 'Yes'].reset_index(drop=True)
+# df = df.drop(columns=['Functioning Day'])
+
+# print(f"filas eliminadas: {before - len(df)}")
+# print(df.shape)
 
 df_clean = pd.get_dummies(df, columns=['Seasons', 'Holiday'], dtype=int)
 
